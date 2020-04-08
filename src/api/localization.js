@@ -14,6 +14,7 @@ const strings = new LocalizedStrings({
     //Letter E
     //Letter F
     //Letter G
+    gotIt: 'Got It',
     //Letter H
     //Letter I
     //Letter J
@@ -46,6 +47,7 @@ const strings = new LocalizedStrings({
     //Huruf E
     //Huruf F
     //Huruf G
+    gotIt: 'Got It',
     //Huruf H
     //Huruf I
     //Huruf J

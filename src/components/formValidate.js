@@ -73,7 +73,7 @@ const InputValidateGroupWithValue = props => {
   } else {
     return (
       <View>
-        <Item style={props.style}>
+        <Item style={props.styleItem}>
           <Input
             placeholderTextColor="grey"
             placeholder={props.placeholder}
