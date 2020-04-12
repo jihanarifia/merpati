@@ -5,7 +5,9 @@ import { InputValidateGroupWithValue } from '@components/formValidate';
 import { strings } from '@api/localization';
 import Axios from 'axios';
 import { USER } from '@api/constants';
-import { styles } from '../components/indexStyle';
+import { styles } from '../components/indexStyle'; 
+import AStorage from '@api/asyncStorage';
+import help from '@api/helper';
 import { ModalAlert } from '../../../components/modalMessage';
 
 class Login extends Component {
@@ -31,26 +33,41 @@ class Login extends Component {
   }
 
   execLogin() {
-    console.log(USER.LOGIN)
     this.setState({ isLoading: true });
     Axios.post(USER.LOGIN, {
-      identifier: this.state.username,
+      username: this.state.username,
       password: this.state.password
     }).then((response) => {
-      if(response){
-        debugger
-      }
       if (response.status === 200) {
-        debugger
         this.setState({ isLoading: false });
-        if (response.data.result) {
-          this.props.navigation.navigate('Home');
+        if (response.data) {
+          if (response.data.hasOwnProperty('token')) {
+            this.getProfile();
+            help.setToken(response.data.token);
+          }
         } else {
+          this.setState({ isModalAlert: true });
         }
       }
     }).catch(error => {
       console.log(error)
-      this.setState({ isLoading: false });
+      this.setState({ isLoading: false, isModalAlert: true });
+    });
+  }
+
+  getProfile() {
+    Axios.get(USER.GET_PROFILE).then((response) => {
+      if (response.status === 200) {
+        this.setState({ isLoading: false });
+        if (response.data) {
+          AStorage.setItem('userData', response.data);
+        } else {
+          this.setState({ isModalAlert: true });
+        }
+      }
+    }).catch(error => {
+      console.log(error)
+      this.setState({ isLoading: false, isModalAlert: true });
     });
   }
 
@@ -63,7 +80,7 @@ class Login extends Component {
               style={styles.logo}
               source={require('@assets/logo.png')}>
             </Image>
-            <View style={{ marginTop: 100}}>
+            <View style={{ marginTop: 100 }}>
               <InputValidateGroupWithValue
                 styleInput={{ color: 'grey' }}
                 placeholder={'username'}

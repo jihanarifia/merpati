@@ -35,7 +35,7 @@ export default {
   },
   setToken(token) {
     if (token) {
-      Axios.defaults.headers.common['Authorization'] = token;
+      Axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     } else {
       Axios.defaults.headers.common['Authorization'] = null;
     }
@@ -57,10 +57,10 @@ export default {
   SeperatorNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
   },
-  expDate(endDate){
+  expDate(endDate) {
     return moment(new Date(endDate)).format('DD/MM/YY');
   },
-  seperator16Digit(digit){
+  seperator16Digit(digit) {
     return digit.match(/(\d{4})/g).join("-");
   }
 };
